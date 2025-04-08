@@ -1,5 +1,7 @@
 package es.iesraprog2425.pruebaes.model
 
+import es.iesraprog2425.pruebaes.ui.Consola
+
 enum class Operadores(val simbolos: List<Char>) {
     SUMA(listOf('+')),
     RESTA(listOf('-')),
@@ -7,6 +9,7 @@ enum class Operadores(val simbolos: List<Char>) {
     DIVISION(listOf(':', '/'));
 
     companion object {
+
         fun getOperador(operador: Char?) = operador?.let { op -> entries.find { op in it.simbolos } }
 
         /*
