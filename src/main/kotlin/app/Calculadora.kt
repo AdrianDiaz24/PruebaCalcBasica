@@ -19,7 +19,7 @@ class Calculadora(private val ui: IEntradaSalida) {
                 num1 = pedirNumero("Introduce el primer número: ", "El primer número no es válido!")
                 valorValido = true
             } catch (e: InfoCalcException) {
-                ui.mostrarError("$e")
+                ui.mostrarError("${e.message}")
             }
         }
         valorValido = false
@@ -29,7 +29,7 @@ class Calculadora(private val ui: IEntradaSalida) {
                     ?: throw InfoCalcException("El operador no es válido!")
                 valorValido = true
             } catch (e: InfoCalcException) {
-                ui.mostrarError("$e")
+                ui.mostrarError("${e.message}")
             }
         }
         valorValido = false
@@ -38,7 +38,7 @@ class Calculadora(private val ui: IEntradaSalida) {
                 num2 = pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!")
                 valorValido = true
             } catch (e: InfoCalcException) {
-                ui.mostrarError("$e")
+                ui.mostrarError("${e.message}")
             }
         }
 
