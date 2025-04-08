@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "2.1.10"
 }
 
-group = "org.example"
+group = "es.iesraprog2425.pruebaes"
 version = "1.0-SNAPSHOT"
 
 repositories {

@@ -9,11 +9,41 @@ class Calculadora(private val ui: IEntradaSalida) {
         return ui.pedirDouble(msj) ?: throw InfoCalcException(msjError)
     }
 
-    private fun pedirInfo() = Triple(
-        pedirNumero("Introduce el primer número: ", "El primer número no es válido!"),
-        Operadores.getOperador(ui.pedirInfo("Introduce el operador (+, -, *, /): ").firstOrNull())
-            ?: throw InfoCalcException("El operador no es válido!"),
-        pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!"))
+    private fun pedirInfo(): Triple<Double, Operadores, Double> {
+        var valorValido = false
+        var num1 = 0.0
+        var num2 = 0.0
+        var operador = Operadores.SUMA
+        while (!valorValido) {
+            try {
+                num1 = pedirNumero("Introduce el primer número: ", "El primer número no es válido!")
+                valorValido = true
+            } catch (e: InfoCalcException) {
+                ui.mostrarError("$e")
+            }
+        }
+        valorValido = false
+        while (!valorValido) {
+            try {
+                operador = Operadores.getOperador(ui.pedirInfo("Introduce el operador (+, -, *, /): ").firstOrNull())
+                    ?: throw InfoCalcException("El operador no es válido!")
+                valorValido = true
+            } catch (e: InfoCalcException) {
+                ui.mostrarError("$e")
+            }
+        }
+        valorValido = false
+        while (!valorValido) {
+            try {
+                num2 = pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!")
+                valorValido = true
+            } catch (e: InfoCalcException) {
+                ui.mostrarError("$e")
+            }
+        }
+
+        return Triple(num1, operador, num2)
+    }
 
     private fun realizarCalculo(numero1: Double, operador: Operadores, numero2: Double) =
         when (operador) {
