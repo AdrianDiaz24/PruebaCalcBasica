@@ -3,6 +3,7 @@ package es.iesraprog2425.pruebaes.app
 import es.iesraprog2425.pruebaes.data.RepoLogs
 import es.iesraprog2425.pruebaes.model.Operadores
 import es.iesraprog2425.pruebaes.redondear
+import es.iesraprog2425.pruebaes.ui.Consola
 import es.iesraprog2425.pruebaes.ui.IEntradaSalida
 
 class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs = RepoLogs()) {
@@ -58,11 +59,55 @@ class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs
             Operadores.DIVISION -> numero1 / numero2
         }
 
-    fun iniciar() {
+    fun pedirArgumentosInicialesEIniciar(){
+
+        var ruta: String
+
+        ui.mostrar("Introduce los argumentos (Opcional)")
+        ui.mostrar("Intrucciones \n- Introduzca solo la ruta donde copiar el log \n- Introduzca la ruta, el 1º Nº, el operador y el 2º Nº separado por espacios \n- En caso de no querer introducirlo pulse intro")
+        print(">> ")
+        val argumentos = readln().split(" ")
+        if (argumentos.isNotEmpty()) {
+            if (argumentos.size == 1 || argumentos.size == 4) {
+                if (argumentos.size == 1) {
+                    ruta = argumentos[0]
+                    iniciar(ruta)
+                } else {
+                    ruta = argumentos[0]
+                    try {
+                        val num1 = argumentos[1].toDouble()
+                        val operador = Operadores.getOperador(argumentos[2].firstOrNull())
+                        if (operador == null) throw InfoCalcException("Operador no valido")
+                        val num2 = argumentos[3].toDouble()
+                        repoLogs.comprobarRuta(ruta)
+                        val resultado = realizarCalculo(num1, operador, num2)
+                        ui.mostrar("$num1 ${operador.simbolos[0]} $num2 = ${resultado.redondear(2)}")
+                        repoLogs.agregarLog("$num1 ${operador.simbolos[0]} $num2 = ${resultado.redondear(2)}")
+                    } catch (e: Exception) {
+                        repoLogs.agregarLog("argumentos no validos")
+                        repoLogs.subirLogs(ruta)
+                    } catch (e: InfoCalcException) {
+                        repoLogs.agregarLog(e.message.toString())
+                        repoLogs.subirLogs(ruta)
+                    }
+                    repoLogs.subirLogs(ruta)
+                    ui.limpiarPantalla(4)
+                    ui.mostrar("Presione Enter/intro para continuar")
+                    readln()
+                    iniciar(ruta)
+                }
+            } else {
+                throw InfoCalcException("Cantidad de argumentos invalidos")
+            }
+        }
+        iniciar()
+    }
+
+    fun iniciar(ruta: String = "./log") {
         do {
             try {
-                repoLogs.comprobarRuta()
-                repoLogs.mostrarUltimoLog()
+                println(repoLogs.comprobarRuta(ruta))
+                repoLogs.mostrarUltimoLog(ruta)
                 ui.limpiarPantalla(2)
                 val (numero1, operador, numero2) = pedirInfo()
                 val resultado = realizarCalculo(numero1, operador, numero2)

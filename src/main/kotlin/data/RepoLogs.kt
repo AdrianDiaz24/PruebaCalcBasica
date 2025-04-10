@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class RepoLogs: IRepoLogs {
-    override val logs: MutableList<String> = mutableListOf()
+    override var logs: MutableList<String> = mutableListOf()
 
     override fun subirLogs(ruta: String) {
         val formatoFecha = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
@@ -13,6 +13,7 @@ class RepoLogs: IRepoLogs {
         for (log in logs) {
             archivo.appendText("$log\n")
         }
+        logs = mutableListOf()
     }
 
     override fun mostrarUltimoLog(ruta: String) {
@@ -40,11 +41,12 @@ class RepoLogs: IRepoLogs {
         return if (fechaMasNueva != "0") File("$ruta/log$fechaMasNueva.txt") else null
     }
 
-    override fun comprobarRuta(ruta: String) {
+    override fun comprobarRuta(ruta: String): String {
         val directorio = File(ruta)
         if (!directorio.exists()){
             directorio.mkdirs()
-            println("Ruta $ruta creada")
+            return "Ruta $ruta creada"
         }
+        return ""
     }
 }

@@ -16,5 +16,5 @@ interface IRepoLogs {
 
     fun buscarUltimoLog(ruta: String = "./log"): File?
 
-    fun comprobarRuta(ruta: String = "./log")
+    fun comprobarRuta(ruta: String = "./log"): String
 }
