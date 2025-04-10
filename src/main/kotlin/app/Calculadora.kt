@@ -93,8 +93,7 @@ class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs
                     readln()
                     iniciar(ruta)
             } else if (argumentos.split(" ").size > 4 || argumentos.split(" ").size in 2..3) {
-                repoLogs.agregarLog("argumentos no validos")
-                repoLogs.subirLogs()
+                ui.mostrarError("Cantidad de argumento no valida")
             } else {
                 ruta = argumentos
                 iniciar(ruta)
