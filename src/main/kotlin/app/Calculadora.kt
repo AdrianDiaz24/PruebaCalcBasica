@@ -67,7 +67,7 @@ class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs
         ui.mostrar("Intrucciones \n- Introduzca solo la ruta donde copiar el log \n- Introduzca la ruta, el 1º Nº, el operador y el 2º Nº separado por espacios \n- En caso de no querer introducirlo pulse intro")
         print(">> ")
         var argumentos = readln()
-        if (argumentos.isNotEmpty()) {
+        if (argumentos.isNotBlank()) {
             if (argumentos.split(" ").size == 4) {
                 val inputs = argumentos.split(" ")
                     ruta = inputs[0]
