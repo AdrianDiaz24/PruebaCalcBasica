@@ -32,7 +32,6 @@ class RepoLogs: IRepoLogs {
         val logs = directorio.listFiles { archivos -> archivos.isFile && archivos.name.startsWith("log") && archivos.name.endsWith(".txt") }
         var fechaMasNueva = "0"
         for (log in logs) {
-
             val fechaLog = log.nameWithoutExtension.replace("log", "")
             if (fechaLog > fechaMasNueva.toString()) {
                 fechaMasNueva = fechaLog
