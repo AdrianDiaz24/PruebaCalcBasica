@@ -1,9 +1,11 @@
 package es.iesraprog2425.pruebaes.app
 
+import es.iesraprog2425.pruebaes.data.RepoLogs
 import es.iesraprog2425.pruebaes.model.Operadores
+import es.iesraprog2425.pruebaes.redondear
 import es.iesraprog2425.pruebaes.ui.IEntradaSalida
 
-class Calculadora(private val ui: IEntradaSalida) {
+class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs = RepoLogs()) {
 
     private fun pedirNumero(msj: String, msjError: String = "Número no válido!"): Double {
         return ui.pedirDouble(msj) ?: throw InfoCalcException(msjError)
@@ -19,6 +21,7 @@ class Calculadora(private val ui: IEntradaSalida) {
                 num1 = pedirNumero("Introduce el primer número: ", "El primer número no es válido!")
                 valorValido = true
             } catch (e: InfoCalcException) {
+                repoLogs.agregarLog("${e.message}")
                 ui.mostrarError("${e.message}")
             }
         }
@@ -29,6 +32,7 @@ class Calculadora(private val ui: IEntradaSalida) {
                     ?: throw InfoCalcException("El operador no es válido!")
                 valorValido = true
             } catch (e: InfoCalcException) {
+                repoLogs.agregarLog("${e.message}")
                 ui.mostrarError("${e.message}")
             }
         }
@@ -38,6 +42,7 @@ class Calculadora(private val ui: IEntradaSalida) {
                 num2 = pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!")
                 valorValido = true
             } catch (e: InfoCalcException) {
+                repoLogs.agregarLog("${e.message}")
                 ui.mostrarError("${e.message}")
             }
         }
@@ -56,14 +61,17 @@ class Calculadora(private val ui: IEntradaSalida) {
     fun iniciar() {
         do {
             try {
-                ui.limpiarPantalla()
+                repoLogs.comprobarRuta()
+                ui.limpiarPantalla(4)
                 val (numero1, operador, numero2) = pedirInfo()
                 val resultado = realizarCalculo(numero1, operador, numero2)
-                ui.mostrar("Resultado: %.2f".format(resultado))
+                ui.mostrar("$numero1 ${operador.simbolos[0]} $numero2 = ${resultado.redondear(2)}")
+                repoLogs.agregarLog("$numero1 ${operador.simbolos[0]} $numero2 = ${resultado.redondear(2)}")
             } catch (e: NumberFormatException) {
                 ui.mostrarError(e.message ?: "Se ha producido un error!")
             }
         } while (ui.preguntar())
+        repoLogs.subirLogs()
         ui.limpiarPantalla()
     }
 

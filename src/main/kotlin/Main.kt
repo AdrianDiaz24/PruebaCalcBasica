@@ -2,6 +2,7 @@ package es.iesraprog2425.pruebaes
 
 import es.iesraprog2425.pruebaes.app.Calculadora
 import es.iesraprog2425.pruebaes.ui.Consola
+import java.math.RoundingMode
 
 /*
 fun main() {
@@ -30,6 +31,10 @@ fun main() {
     Calculadora(Consola()).iniciar()
 }
 
+
+fun Double.redondear(decimales: Int):Double{
+    return this.toBigDecimal().setScale(decimales, RoundingMode.HALF_UP).toDouble()
+}
 
 /*
 import java.util.*
