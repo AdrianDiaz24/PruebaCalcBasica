@@ -28,7 +28,8 @@ fun main() {
 */
 
 fun main() {
-    Calculadora(Consola()).iniciar()
+    //Calculadora(Consola()).iniciar()
+    Calculadora(Consola()).pedirArgumentosInicialesEIniciar()
 }
 
 

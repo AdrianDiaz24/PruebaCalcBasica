@@ -66,19 +66,16 @@ class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs
         ui.mostrar("Introduce los argumentos (Opcional)")
         ui.mostrar("Intrucciones \n- Introduzca solo la ruta donde copiar el log \n- Introduzca la ruta, el 1º Nº, el operador y el 2º Nº separado por espacios \n- En caso de no querer introducirlo pulse intro")
         print(">> ")
-        val argumentos = readln().split(" ")
+        var argumentos = readln()
         if (argumentos.isNotEmpty()) {
-            if (argumentos.size == 1 || argumentos.size == 4) {
-                if (argumentos.size == 1) {
-                    ruta = argumentos[0]
-                    iniciar(ruta)
-                } else {
-                    ruta = argumentos[0]
+            if (argumentos.split(" ").size == 4) {
+                val inputs = argumentos.split(" ")
+                    ruta = inputs[0]
                     try {
-                        val num1 = argumentos[1].toDouble()
-                        val operador = Operadores.getOperador(argumentos[2].firstOrNull())
+                        val num1 = inputs[1].toDouble()
+                        val operador = Operadores.getOperador(inputs[2].firstOrNull())
                         if (operador == null) throw InfoCalcException("Operador no valido")
-                        val num2 = argumentos[3].toDouble()
+                        val num2 = inputs[3].toDouble()
                         repoLogs.comprobarRuta(ruta)
                         val resultado = realizarCalculo(num1, operador, num2)
                         ui.mostrar("$num1 ${operador.simbolos[0]} $num2 = ${resultado.redondear(2)}")
@@ -95,12 +92,16 @@ class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs
                     ui.mostrar("Presione Enter/intro para continuar")
                     readln()
                     iniciar(ruta)
-                }
+            } else if (argumentos.split(" ").size > 4 || argumentos.split(" ").size in 2..3) {
+                repoLogs.agregarLog("argumentos no validos")
+                repoLogs.subirLogs()
             } else {
-                throw InfoCalcException("Cantidad de argumentos invalidos")
+                ruta = argumentos
+                iniciar(ruta)
             }
+        } else {
+            iniciar()
         }
-        iniciar()
     }
 
     fun iniciar(ruta: String = "./log") {
@@ -117,7 +118,7 @@ class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs
                 ui.mostrarError(e.message ?: "Se ha producido un error!")
             }
         } while (ui.preguntar())
-        repoLogs.subirLogs()
+        repoLogs.subirLogs(ruta)
         ui.limpiarPantalla()
     }
 
