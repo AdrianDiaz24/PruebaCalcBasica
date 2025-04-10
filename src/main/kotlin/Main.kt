@@ -28,7 +28,7 @@ fun main() {
 */
 
 fun main() {
-    Calculadora(Consola()).pedirArgumentosInicialesEIniciar()
+    Calculadora(Consola()).iniciar()
 }
 
 
