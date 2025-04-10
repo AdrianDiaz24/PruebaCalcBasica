@@ -33,7 +33,7 @@ class RepoLogs: IRepoLogs {
         var fechaMasNueva = "0"
         for (log in logs) {
             val fechaLog = log.nameWithoutExtension.replace("log", "")
-            if (fechaLog > fechaMasNueva.toString()) {
+            if (fechaLog > fechaMasNueva) {
                 fechaMasNueva = fechaLog
             }
         }
