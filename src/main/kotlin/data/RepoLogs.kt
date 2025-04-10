@@ -15,8 +15,30 @@ class RepoLogs: IRepoLogs {
         }
     }
 
-    override fun mostrarUltimoLog() {
-        TODO("Not yet implemented")
+    override fun mostrarUltimoLog(ruta: String) {
+        val archivo = buscarUltimoLog(ruta)
+        if (archivo !== null) {
+            val lineas = archivo.readLines()
+            for (linea in lineas) {
+                println(linea)
+            }
+        } else {
+            println("No existen ficheros de Log")
+        }
+    }
+
+    override fun buscarUltimoLog(ruta: String): File? {
+        val directorio = File(ruta)
+        val logs = directorio.listFiles { archivos -> archivos.isFile && archivos.name.startsWith("log") && archivos.name.endsWith(".txt") }
+        var fechaMasNueva = "0"
+        for (log in logs) {
+
+            val fechaLog = log.nameWithoutExtension.replace("log", "")
+            if (fechaLog > fechaMasNueva.toString()) {
+                fechaMasNueva = fechaLog
+            }
+        }
+        return if (fechaMasNueva != "0") File("$ruta/log$fechaMasNueva.txt") else null
     }
 
     override fun comprobarRuta(ruta: String) {

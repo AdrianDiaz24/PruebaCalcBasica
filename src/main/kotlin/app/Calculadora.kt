@@ -62,7 +62,8 @@ class Calculadora(private val ui: IEntradaSalida, private val repoLogs: RepoLogs
         do {
             try {
                 repoLogs.comprobarRuta()
-                ui.limpiarPantalla(4)
+                repoLogs.mostrarUltimoLog()
+                ui.limpiarPantalla(2)
                 val (numero1, operador, numero2) = pedirInfo()
                 val resultado = realizarCalculo(numero1, operador, numero2)
                 ui.mostrar("$numero1 ${operador.simbolos[0]} $numero2 = ${resultado.redondear(2)}")
